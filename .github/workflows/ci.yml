@@ -25,7 +25,7 @@ jobs:
         run: |
           check_code=$(curl -s -o /tmp/sonar_check.json -w "%{http_code}" \
             -H "Authorization: Bearer $SONAR_TOKEN" \
-            "https://sonarqube.us/api/projects/search?projects=gourabd1ms_dotnet_demo")
+            "https://sonarqube.us/api/projects/search?projects=gourabd1ms_dotnet.demo")
           exists=$(python3 -c "import json;print(json.load(open('/tmp/sonar_check.json'))['paging']['total'])" 2>/dev/null || echo 0)
           if [ "$check_code" = "200" ] && [ "$exists" != "0" ]; then
             echo "Project already exists, skipping creation"
@@ -34,7 +34,7 @@ jobs:
               -H "Authorization: Bearer $SONAR_TOKEN" \
               "https://sonarqube.us/api/projects/create" \
               --data-urlencode "organization=gourabd1ms" \
-              --data-urlencode "project=gourabd1ms_dotnet_demo" \
+              --data-urlencode "project=gourabd1ms_dotnet.demo" \
               --data-urlencode "name=dotnet.demo")
             echo "HTTP $http_code"
             cat /tmp/sonar_create.json
@@ -48,7 +48,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           export PATH="$PATH:$HOME/.dotnet/tools"
-          dotnet-sonarscanner begin /k:"gourabd1ms_dotnet_demo" /o:"gourabd1ms" /d:sonar.host.url="https://sonarqube.us" /d:sonar.token="$SONAR_TOKEN"
+          dotnet-sonarscanner begin /k:"gourabd1ms_dotnet.demo" /o:"gourabd1ms" /d:sonar.host.url="https://sonarqube.us" /d:sonar.token="$SONAR_TOKEN"
           dotnet build
           dotnet test
           dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
