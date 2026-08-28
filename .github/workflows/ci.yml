@@ -49,6 +49,6 @@ jobs:
         run: |
           export PATH="$PATH:$HOME/.dotnet/tools"
           dotnet-sonarscanner begin /k:"gourabd1ms_dotnet.demo" /o:"gourabd1ms" /d:sonar.host.url="https://sonarqube.us" /d:sonar.token="$SONAR_TOKEN" /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml"
-          dotnet build
-          dotnet test --collect:"XPlat Code Coverage"
+          dotnet build src/App/App.csproj
+          dotnet test tests/App.Tests/App.Tests.csproj --collect:"XPlat Code Coverage"
           dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
